@@ -86,9 +86,10 @@ const OnboardingScreen = ({navigation}) => {
         nextButton={
           <View
             style={{
-              height: 60,
-              borderRadius: 30,
+              height: 40,
+              borderRadius: 20,
               alignItems: "center",
+              marginBottom:10,
               justifyContent: "center",
               width: 60,
               backgroundColor: secondary.button,
@@ -100,11 +101,12 @@ const OnboardingScreen = ({navigation}) => {
         prevButton={
           <View
             style={{
-              height: 60,
-              borderRadius: 30,
+              height: 40,
+              borderRadius: 20,
               alignItems: "center",
               justifyContent: "center",
               width: 60,
+              marginBottom:10,
               backgroundColor: secondary.button,
               marginHorizontal: 20,
             }}
