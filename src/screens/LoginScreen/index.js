@@ -7,12 +7,15 @@ import FormInput from "../../components/FormInput";
 import { LinearGradient } from 'expo-linear-gradient';
 import { primary } from "../../theme/theme";
 import { connect } from "react-redux";
-import { signinUserGoogle } from "../../redux/actions/userAction";
+import { signinUserGoogle,signinUserFb } from "../../redux/actions/userAction";
 
-const LoginScreen = ({ navigation,signinUserGoogle }) => {
+const LoginScreen = ({ navigation,signinUserGoogle,signinUserFb }) => {
   
   const signinGoogle = () => {
     signinUserGoogle();
+  }
+  const signInFb = () => {
+    signinUserFb();
   }
 
 
@@ -22,7 +25,7 @@ const LoginScreen = ({ navigation,signinUserGoogle }) => {
       <Text style={styles.subtitle}>Log In with one of the following options.</Text>
       <View style={styles.oAuth}>
         <GoogleButton press={()=>signinGoogle()}/>
-        <FacebookButton/>
+        <FacebookButton press={()=>signInFb()}/>
       </View>
       <View style={styles.emailCredentials}>
         <FormInput name="mail" phd="Email"/>
@@ -51,7 +54,8 @@ const LoginScreen = ({ navigation,signinUserGoogle }) => {
 }
 
 export default connect(null, {
-  signinUserGoogle:signinUserGoogle
+  signinUserGoogle: signinUserGoogle,
+  signinUserFb:signinUserFb
 })(LoginScreen)
 
 const styles = StyleSheet.create({

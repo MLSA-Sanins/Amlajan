@@ -55,4 +55,23 @@ export const signOutUserGoogle = () => async (dispatch, getState) => {
 
 //facebook oauth
 
+export const signinUserFb = () => async (dispatch) => {
+  //fetching user
+  dispatch({ type: FETCHING_USER })
 
+  try {
+    const user = await Facebook.logInWithReadPermissionsAsync({
+      permissions: ['public_profile'],
+    });
+    if (user.type === 'success') {
+      dispatch({type:USER_FETCHED,payload:user})
+      // Get the user's name using Facebook's Graph API
+      const response = await fetch(`https://graph.facebook.com/me?access_token=${user.token}`);
+      Alert.alert('Logged in!', `Hi ${(await response.json()).name}!`);
+    } else {
+      dispatch({type:"AUTH_ERROR"})
+    }
+  } catch (error) {
+    dispatch(getErrors(error))
+  }
+}

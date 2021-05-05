@@ -15,13 +15,17 @@ const SignUpScreen = ({ navigation, signinUserGoogle }) => {
     signinUserGoogle();
   }
 
+  const signInFb = () => {
+    signinUserFb();
+  }
+
   return (
     <View style={styles.Page}>
       <Text style={styles.header}>SIGN UP</Text>
       <Text style={styles.subtitle}>Sign up with one of the following options.</Text>
       <View style={styles.oAuth}>
         <GoogleButton press={()=>signinGoogle()}/>
-        <FacebookButton/>
+        <FacebookButton press={() => signInFb()}/>
       </View>
       <View style={styles.emailCredentials}>
         <FormInput name="mail" phd="Email"/>
