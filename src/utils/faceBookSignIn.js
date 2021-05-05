@@ -7,8 +7,12 @@ export const initFbAsync = async (fetchUser,dispatch) => {
     await Facebook.initializeAsync({
       appId: '3843660325751667',
     });
-    const user = await Facebook.getAuthenticationCredentialAsync();
-    fetchUser(user);
+    const user = await Facebook.getAuthenticationCredentialAsync(); 
+    if (!auth) {
+      dispatch({ type: AUTH_ERROR });
+    } else {
+      fetchUser(user);
+    }
   } catch (error) {
     console.log(error);
     alert(`Facebook Login Error: ${error}`);
