@@ -30,6 +30,9 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "facebookScheme":"fb3843660325751667",
+    "facebookAppId":"3843660325751667",
+    "facebookDisplayName":"Amlajan"
   }
 }
