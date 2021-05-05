@@ -27,7 +27,6 @@ const Routes = ({user}) => {
       return <AuthStack/>
     }
   }
-  console.log(user);
   return (
     <NavigationContainer>
       {returnStack()}

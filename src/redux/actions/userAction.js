@@ -16,10 +16,7 @@ const _syncUserWithStateAsync = async (dispatch) => {
   dispatch({ type: USER_FETCHED, payload: user });
 };
 
-export const fetchUser = (user) => async (dispatch, getState) => {
-  //fetching user
-  dispatch({ type: FETCHING_USER })
-
+export const fetchUser = (user) => async (dispatch) => {
   try {
     dispatch({ type: USER_FETCHED, payload: user });
   } catch (error) {
