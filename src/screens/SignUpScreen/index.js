@@ -6,14 +6,21 @@ import GoogleButton from "../../components/GoogleButton";
 import FormInput from "../../components/FormInput";
 import { LinearGradient } from 'expo-linear-gradient';
 import { primary } from "../../theme/theme";
+import { connect } from "react-redux";
+import {signinUserGoogle} from "../../redux/actions/userAction"
 
-export default function SignUpScreen({navigation}) {
+const SignUpScreen = ({ navigation, signinUserGoogle }) => {
+  
+  const signinGoogle = () => {
+    signinUserGoogle();
+  }
+
   return (
     <View style={styles.Page}>
       <Text style={styles.header}>SIGN UP</Text>
       <Text style={styles.subtitle}>Sign up with one of the following options.</Text>
       <View style={styles.oAuth}>
-        <GoogleButton />
+        <GoogleButton press={()=>signinGoogle()}/>
         <FacebookButton/>
       </View>
       <View style={styles.emailCredentials}>
@@ -42,6 +49,10 @@ export default function SignUpScreen({navigation}) {
     </View>
   )
 }
+
+export default connect(null, {
+  signinUserGoogle:signinUserGoogle
+})(SignUpScreen)
 
 const styles = StyleSheet.create({
   Page: {

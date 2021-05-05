@@ -9,10 +9,6 @@ import {
 import { getErrors, clearErrors } from "../actions/errorActions";
 import * as GoogleSignIn from 'expo-google-sign-in';
 
-// //firebase
-// import firebase from 'firebase';
-// import { firebaseConfig } from "../../keys";
-
 
 //google auth
 const _syncUserWithStateAsync = async (dispatch) => {
@@ -40,7 +36,7 @@ export const signinUserGoogle = () => async (dispatch, getState) => {
     await GoogleSignIn.askForPlayServicesAsync();
     const { type, user } = await GoogleSignIn.signInAsync();
     if (type === 'success') {
-      this._syncUserWithStateAsync();
+      await _syncUserWithStateAsync(dispatch);
     }
   } catch ({ message }) {
     alert('login: Error:' + message);

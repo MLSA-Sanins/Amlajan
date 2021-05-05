@@ -7,13 +7,21 @@ import * as GoogleSignIn from 'expo-google-sign-in';
 class Providers extends React.Component {
 
   initAsync = async () => {
-    await GoogleSignIn.initAsync({});
-    this._syncUserWithStateAsync();
+    try {
+      await GoogleSignIn.initAsync({});
+      this._syncUserWithStateAsync();
+    } catch(e) {
+      console.log("Problems",e);
+    }
   };
 
   _syncUserWithStateAsync = async () => {
-    const user = await GoogleSignIn.signInSilentlyAsync();
-    this.props.fetchUser(user);
+    try {
+      const user = await GoogleSignIn.signInSilentlyAsync();
+      this.props.fetchUser(user);
+    } catch (e) {
+      console.log("Problems",e);
+    }
   };
   
   componentDidMount() {

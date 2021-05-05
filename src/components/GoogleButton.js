@@ -4,9 +4,9 @@ import { AntDesign } from '@expo/vector-icons';
 import { width, height } from "../utils/dimensions";
 
 
-export default function GoogleButton() {
+export default function GoogleButton({press}) {
   return (
-    <TouchableOpacity style={styles.google}>
+    <TouchableOpacity onPress={()=>press()} style={styles.google}>
       <AntDesign style={styles.googleIcon} name="google"/>
     </TouchableOpacity>
   )
