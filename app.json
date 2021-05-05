@@ -21,10 +21,12 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.sanins.amlajan",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "googleServicesFile":"./google/google-services.json"
     },
     "web": {
       "favicon": "./assets/favicon.png"

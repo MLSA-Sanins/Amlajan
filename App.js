@@ -2,6 +2,8 @@ import React from 'react';
 import Providers from "./src/navigation";
 import { Asset } from 'expo-asset';
 import AppLoading from 'expo-app-loading';
+import { store } from "./src/redux/store";
+import {Provider} from "react-redux";
 //import { StatusBar } from 'expo-status-bar';
 
 //cache images
@@ -20,7 +22,7 @@ function cacheImages(images) {
 //   return fonts.map(font => Font.loadAsync(font));
 // }
 
-export default class App extends React.Component {
+class App extends React.Component {
   state = {
     isReady: false
   };
@@ -38,26 +40,27 @@ export default class App extends React.Component {
     await Promise.all([...imageAssets])
   }
 
+  onFinishLoading = () => {
+    this.setState({ isReady: true })
+  }
+
 
   render() {
     if (!this.state.isReady) {
       return (
         <AppLoading
           startAsync={this._loadAssetsAsync}
-          onFinish={this.setState({ isReady: true })}
+          onFinish={this.onFinishLoading}
           onError={console.warn}
         />
       );
     };
-    return <Providers/>
+    return (
+      <Provider store={store}>
+          <Providers />
+      </Provider>
+    )
   }
 }
 
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: '#fff',
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//   },
-// });
+export default App;
