@@ -1,6 +1,11 @@
-import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Touchable } from 'react-native';
+import React,{useEffect} from 'react';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { width, height } from "../../utils/dimensions";
+import { bindActionCreators } from 'redux';
+import { initAsync } from "../../utils/googleSignIn";
+import { initFbAsync } from "../../utils/faceBookSignIn";
+import { fetchUser } from "../../redux/actions/userAction";
+import { FETCHING_USER } from "../../redux/constants/index";
 import FacebookButton from "../../components/FacebookButton";
 import GoogleButton from "../../components/GoogleButton";
 import FormInput from "../../components/FormInput";
@@ -9,7 +14,7 @@ import { primary } from "../../theme/theme";
 import { connect } from "react-redux";
 import { signinUserGoogle,signinUserFb } from "../../redux/actions/userAction";
 
-const LoginScreen = ({ navigation,signinUserGoogle,signinUserFb }) => {
+const LoginScreen = ({ navigation,signinUserGoogle,signinUserFb,dispatch,fetchUser }) => {
   
   const signinGoogle = () => {
     signinUserGoogle();
@@ -18,6 +23,11 @@ const LoginScreen = ({ navigation,signinUserGoogle,signinUserFb }) => {
     signinUserFb();
   }
 
+  useEffect(() => {
+    //dispatch({type:FETCHING_USER})
+    initAsync(fetchUser, dispatch);
+    initFbAsync(fetchUser, dispatch)
+  },[])
 
   return (
     <View style={styles.Page}>
@@ -53,10 +63,14 @@ const LoginScreen = ({ navigation,signinUserGoogle,signinUserFb }) => {
   )
 }
 
-export default connect(null, {
-  signinUserGoogle: signinUserGoogle,
-  signinUserFb:signinUserFb
-})(LoginScreen)
+function mapDispatchToProps(dispatch) {
+  return {
+    dispatch,
+    ...bindActionCreators({ fetchUser,signinUserGoogle,signinUserFb }, dispatch),
+  }
+}
+
+export default connect(null,mapDispatchToProps)(LoginScreen)
 
 const styles = StyleSheet.create({
   Page: {

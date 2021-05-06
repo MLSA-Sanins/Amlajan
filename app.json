@@ -4,9 +4,9 @@
     "slug": "amlajan",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/adaptive-iconamlajan.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/splashamlajan.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
