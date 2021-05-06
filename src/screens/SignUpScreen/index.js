@@ -49,6 +49,13 @@ const SignUpScreen = ({ navigation, signinUserGoogle }) => {
               <Text style={styles.link}>Log In</Text>
           </TouchableOpacity>
         </View>
+        <View style={styles.bottomView}>
+          <TouchableOpacity onPress={() => navigation.navigate('PrivacyPolicy')} style={styles.signUpLink}>
+            <Text style={styles.link}>
+              Privacy Policy
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   )
