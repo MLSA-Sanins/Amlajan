@@ -8,6 +8,7 @@ import {
 } from "../constants";
 import { getErrors, clearErrors } from "../actions/errorActions";
 import * as GoogleSignIn from 'expo-google-sign-in';
+import * as Facebook from 'expo-facebook';
 
 
 //google auth
@@ -31,9 +32,11 @@ export const signinUserGoogle = () => async (dispatch, getState) => {
 
   try {
     await GoogleSignIn.askForPlayServicesAsync();
-    const { type, user } = await GoogleSignIn.signInAsync();
+    const { type} = await GoogleSignIn.signInAsync();
     if (type === 'success') {
       await _syncUserWithStateAsync(dispatch);
+    } else {
+      dispatch({ type: AUTH_ERROR });
     }
   } catch ({ message }) {
     alert('login: Error:' + message);
@@ -60,9 +63,14 @@ export const signinUserFb = () => async (dispatch) => {
   dispatch({ type: FETCHING_USER })
 
   try {
+    console.log("FB SIGNING")
+    await Facebook.initializeAsync({
+      appId: '3843660325751667',
+    });
     const user = await Facebook.logInWithReadPermissionsAsync({
       permissions: ['public_profile'],
     });
+
     if (user.type === 'success') {
       dispatch({type:USER_FETCHED,payload:user})
       // Get the user's name using Facebook's Graph API

@@ -17,6 +17,5 @@ export const initFbAsync = async (fetchUser,dispatch) => {
     console.log(error);
     alert(`Facebook Login Error: ${error}`);
     dispatch(getErrors(error));
-    dispatch({ type: AUTH_ERROR });
   }
 }
