@@ -23,7 +23,7 @@
     "android": {
       "package": "com.sanins.amlajan",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/adaptive-iconamlajan.png",
         "backgroundColor": "#FFFFFF"
       },
       "googleServicesFile":"./google/google-services.json"
