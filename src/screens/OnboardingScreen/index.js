@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     marginHorizontal: 10,
-    backgroundColor: primary.main,
+    backgroundColor: secondary.button,
     marginTop: 20,
     borderRadius:10,
   },

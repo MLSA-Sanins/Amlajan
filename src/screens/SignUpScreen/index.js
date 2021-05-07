@@ -38,7 +38,7 @@ const SignUpScreen = ({ navigation, signinUserGoogle }) => {
           colors={[primary.main, primary.light]}
           style={styles.button}
           >
-            <Text style={styles.buttonText}>LOGIN</Text>
+            <Text style={styles.buttonText}>SIGN UP</Text>
           </LinearGradient>
         </TouchableOpacity>
         <View style={styles.bottomView}>
