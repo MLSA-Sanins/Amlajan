@@ -70,11 +70,16 @@ export const signinUserFb = () => async (dispatch) => {
     const user = await Facebook.logInWithReadPermissionsAsync({
       permissions: ['public_profile'],
     });
-
+    //console.log(user);
     if (user.type === 'success') {
-      dispatch({type:USER_FETCHED,payload:user})
+      
+      const height = 200;
+      
       // Get the user's name using Facebook's Graph API
-      const response = await fetch(`https://graph.facebook.com/me?access_token=${user.token}`);
+      // const response = await fetch(`https://graph.facebook.com/me?access_token=${user.token}`);
+      const data = await fetch(`https://graph.facebook.com/v10.0/me?fields=id%2Cname%2Cpicture.height(200).width(200)&access_token=${user.token}`);
+      const dataJson = await data.json();
+      dispatch({ type: USER_FETCHED, payload: dataJson })
       Alert.alert('Logged in!', `Hi ${(await response.json()).name}!`);
     } else {
       dispatch({type:"AUTH_ERROR"})

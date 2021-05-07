@@ -11,7 +11,10 @@ export const initFbAsync = async (fetchUser,dispatch) => {
     if (!user) {
       dispatch({ type: AUTH_ERROR });
     } else {
-      fetchUser(user);
+      const data = await fetch(`https://graph.facebook.com/v10.0/me?fields=id%2Cname%2Cpicture.height(200).width(200)&access_token=${user.token}`);
+      const dataJson = await data.json();
+      console.log(dataJson)
+      fetchUser(dataJson);
     }
   } catch (error) {
     console.log(error);
