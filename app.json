@@ -4,7 +4,7 @@
     "slug": "amlajan",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/adaptive-iconamlajan.png",
+    "icon": "./assets/icon.png",
     "splash": {
       "image": "./assets/splashamlajan.png",
       "resizeMode": "contain",
@@ -23,7 +23,7 @@
     "android": {
       "package": "com.sanins.amlajan",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/adaptive-iconamlajan.png",
         "backgroundColor": "#FFFFFF"
       },
       "googleServicesFile":"./google/google-services.json"

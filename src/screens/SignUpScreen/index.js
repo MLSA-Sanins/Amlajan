@@ -38,7 +38,7 @@ const SignUpScreen = ({ navigation, signinUserGoogle }) => {
           colors={[primary.main, primary.light]}
           style={styles.button}
           >
-            <Text style={styles.buttonText}>LOGIN</Text>
+            <Text style={styles.buttonText}>SIGN UP</Text>
           </LinearGradient>
         </TouchableOpacity>
         <View style={styles.bottomView}>
@@ -47,6 +47,13 @@ const SignUpScreen = ({ navigation, signinUserGoogle }) => {
           </Text>
           <TouchableOpacity onPress={()=>navigation.navigate('Login')} style={styles.signUpLink}>
               <Text style={styles.link}>Log In</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.bottomView}>
+          <TouchableOpacity onPress={() => navigation.navigate('PrivacyPolicy')} style={styles.signUpLink}>
+            <Text style={styles.link}>
+              Privacy Policy
+            </Text>
           </TouchableOpacity>
         </View>
       </View>

@@ -4,6 +4,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import SignUpScreen from '../screens/SignUpScreen';
 import LoginScreen from '../screens/LoginScreen';
 import OnboardingScreen from '../screens/OnboardingScreen';
+import PrivacyPolicyScreen from "../screens/PrivacyPolicyScreen";
 
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
@@ -55,6 +56,29 @@ const AuthStack = () => {
       <Stack.Screen
         name="Signup"
         component={SignUpScreen}
+        options={({navigation}) => ({
+          title: '',
+          headerStyle: {
+            backgroundColor: '#f9fafd',
+            shadowColor: '#f9fafd',
+            elevation: 0,
+          },
+          headerLeft: () => (
+            <View style={{marginLeft: 10}}>
+              <FontAwesome.Button 
+                name="long-arrow-left"
+                size={25}
+                backgroundColor="#f9fafd"
+                color="#333"
+                onPress={() => navigation.navigate('Login')}
+              />
+            </View>
+          ),
+        })}
+      />
+      <Stack.Screen
+        name="PrivacyPolicy"
+        component={PrivacyPolicyScreen}
         options={({navigation}) => ({
           title: '',
           headerStyle: {

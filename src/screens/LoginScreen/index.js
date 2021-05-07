@@ -58,6 +58,13 @@ const LoginScreen = ({ navigation,signinUserGoogle,signinUserFb,dispatch,fetchUs
               <Text style={styles.link}>Sign Up</Text>
           </TouchableOpacity>
         </View>
+        <View style={styles.bottomView}>
+          <TouchableOpacity onPress={() => navigation.navigate('PrivacyPolicy')} style={styles.signUpLink}>
+            <Text style={styles.link}>
+              Privacy Policy
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   )
