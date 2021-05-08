@@ -72,7 +72,9 @@ const styles = StyleSheet.create({
   },
   location:{
     justifyContent:"center",
-    backgroundColor:primary.main
+    backgroundColor: primary.main,
+    borderTopRightRadius: 4,
+    borderBottomRightRadius:4
   },
   mapPin:{
     fontSize: 20,
@@ -86,7 +88,8 @@ const styles = StyleSheet.create({
     height: 120,
     borderRadius: 100,
     alignSelf: "center",
-    elevation:15
+    elevation: 15,
+    backgroundColor:"gray"
   },
   img: {
     width: 120,
