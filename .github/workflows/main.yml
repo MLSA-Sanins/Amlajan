@@ -1,12 +1,11 @@
-- name: Expo GitHub Action
-  uses: expo/expo-github-action@5.1.1
+name: Expo Publish
 on:
   push:
     branches:
       - master
 jobs:
-  ci:
-    name: Continuous Integration And Production Build
+  publish:
+    name: Install and Build on Push to master
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -16,5 +15,8 @@ jobs:
       - uses: expo/expo-github-action@v5
         with:
           expo-version: 4.x
+          expo-username: ${{ secrets.EXPO_CLI_USERNAME }}
+          expo-password: ${{ secrets.EXPO_CLI_PASSWORD }}
+          expo-cache: true
       - run: yarn install
-      - run: expo build:web
+      - run: expo build:android
