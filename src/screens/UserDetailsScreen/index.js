@@ -1,11 +1,61 @@
-import React from 'react';
-import { StyleSheet, Text, View,TextInput,TouchableOpacity,Image } from 'react-native';
+import React,{useState} from 'react';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image } from 'react-native';
+import BottomSheet from "../../components/BottomSheet";
 import FormInput from "../../components/FormInput";
 import { Feather } from "@expo/vector-icons";
 import { primary,secondary } from "../../theme/theme";
 import { connect } from "react-redux";
+import Animated, {
+  useAnimatedGestureHandler,
+  useSharedValue,
+  useAnimatedStyle,
+  withSpring
+} from 'react-native-reanimated';
+import { PanGestureHandler } from "react-native-gesture-handler";
+import { width, height } from "../../utils/dimensions";
 
-const UserDetailsScreen=({route,user})=> {
+const SPRING_CONFIG = {
+  damping:80,
+  overshootClamping:true,
+  restDisplacementThreshold:0.1,
+  restSpeedThreshold:0.1,
+  stiffness:500,
+}
+
+
+const UserDetailsScreen = ({ route, user }) => {
+  
+  const top = useSharedValue({
+    height
+  });
+
+  const gestureHandler = useAnimatedGestureHandler({
+    onStart(_, context) {
+      context.startTop = top.value;
+    },
+    onActive(event) {
+      top.value = context.startTop + event.translationY;
+    },
+    onEnd() {
+      if (top.value > height / 1.2 + 200) {
+        top.value = height;
+      } else {
+        top.value = height / 1.2;
+      }
+    }
+  });
+
+  const styled = useAnimatedStyle(() => {
+    return {
+      top: withSpring(top.value, SPRING_CONFIG)
+    }
+  });
+  
+  const showBottomScreen = () => {
+    top.value = withSpring(height / 1.2,SPRING_CONFIG);
+  }
+
+
   return (
     <View>
       <Text style={styles.title}>
@@ -22,7 +72,7 @@ const UserDetailsScreen=({route,user})=> {
       {route.params.title.toUpperCase() === "PROVIDER" &&<FormInput phd="Phone Number" name="smartphone"/>}
       <View style={styles.formContainer}>
         <Feather style={styles.icon} name="map"/>
-        <TextInput style={styles.textInput} placeholder="Address"/>
+        <TextInput style={styles.textInput} placeholder="Address" onPress={()=>showBottomScreen()}/>
         <TouchableOpacity style={styles.location}>
           <Feather style={styles.mapPin} name="map-pin"/>
         </TouchableOpacity>
@@ -30,6 +80,9 @@ const UserDetailsScreen=({route,user})=> {
       <TouchableOpacity style={styles.registerButton}>
         <Text style={styles.buttonText}>{route.params.title==="Provider"?"REGISTER":"SEARCH PROVIDERS" }</Text>
       </TouchableOpacity>
+      <PanGestureHandler onGestureEvent={gestureHandler}>
+        <BottomSheet styled={styled}/>
+      </PanGestureHandler>
     </View>
   )
 };
