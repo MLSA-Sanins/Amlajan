@@ -5,7 +5,7 @@ on:
       - master
 jobs:
   publish:
-    name: Install and Build on Push to master
+    name: Install and publish
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -15,8 +15,7 @@ jobs:
       - uses: expo/expo-github-action@v5
         with:
           expo-version: 4.x
-          expo-username: ${{ secrets.EXPO_CLI_USERNAME }}
-          expo-password: ${{ secrets.EXPO_CLI_PASSWORD }}
-          expo-cache: true
+          expo-username: ${{secrets.EXPO_CLI_USERNAME}}
+          expo-password: ${{secrets.EXPO_CLI_PASSWORD}}
       - run: yarn install
       - run: expo build:android
