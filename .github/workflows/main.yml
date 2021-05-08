@@ -6,7 +6,7 @@ on:
       - master
 jobs:
   publish:
-    name: Install and publish
+    name: Install and Build for Android
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -19,4 +19,4 @@ jobs:
           expo-username: ${{secrets.EXPO_CLI_USERNAME}}
           expo-password: ${{secrets.EXPO_CLI_PASSWORD}}
       - run: yarn install
-      - run: expo build:android
+      - run: expo build:android -t apk
