@@ -1,4 +1,4 @@
-name: Expo Publish
+name: Expo Build Android
 on:
   workflow_dispatch:
   push:
