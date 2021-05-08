@@ -14,7 +14,8 @@ import * as Facebook from 'expo-facebook';
 //google auth
 const _syncUserWithStateAsync = async (dispatch) => {
   const user = await GoogleSignIn.signInSilentlyAsync();
-  dispatch({ type: USER_FETCHED, payload: user });
+  const pic = await GoogleSignIn.getPhotoAsync(400);
+  dispatch({ type: USER_FETCHED, payload: {...user,picture:{data:{url:pic}}} });
 };
 
 export const fetchUser = (user) => async (dispatch) => {

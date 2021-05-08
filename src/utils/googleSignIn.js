@@ -14,10 +14,11 @@ export const initAsync = async (fetchUser,dispatch) => {
 const _syncUserWithStateAsync = async (fetchUser) => {
   try {
     const user = await GoogleSignIn.signInSilentlyAsync();
+    const pic = await GoogleSignIn.getPhotoAsync(400);
     if (!user) {
       dispatch({ type: AUTH_ERROR });
     } else {
-      fetchUser(user);
+      fetchUser({...user,picture:{data:{url:pic}}});
     } 
   } catch (e) {
     console.log("Problems", e);
