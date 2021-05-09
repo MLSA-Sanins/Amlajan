@@ -4,11 +4,17 @@ import {
   USER_LOGGED_IN,
   SIGNING_OUT_USER,
   SIGN_OUT_USER,
-  AUTH_ERROR
+  AUTH_ERROR,
+  LOADING_LOCATION,
+  LOCATION_FETCHED,
+  LOCATION_ERROR,
+  FETCHING_ADDRESS,
+  ADDRESS_FETCHED
 } from "../constants";
 import { getErrors, clearErrors } from "../actions/errorActions";
 import * as GoogleSignIn from 'expo-google-sign-in';
 import * as Facebook from 'expo-facebook';
+import * as Location from 'expo-location';
 
 
 //google auth
@@ -29,6 +35,9 @@ export const fetchUser = (user) => async (dispatch) => {
 
 export const signinUserGoogle = () => async (dispatch, getState) => {
   //fetching user
+  if (getState().user.currentUser) {
+    return
+  }
   dispatch({ type: FETCHING_USER })
 
   try {
@@ -59,8 +68,11 @@ export const signOutUserGoogle = () => async (dispatch, getState) => {
 
 //facebook oauth
 
-export const signinUserFb = () => async (dispatch) => {
+export const signinUserFb = () => async (dispatch,getState) => {
   //fetching user
+  if (getState().user.currentUser) {
+    return
+  }
   dispatch({ type: FETCHING_USER })
 
   try {
@@ -87,5 +99,66 @@ export const signinUserFb = () => async (dispatch) => {
     }
   } catch (error) {
     dispatch(getErrors(error))
+  }
+}
+
+
+//fetch user location
+export const fetchLocation = () =>async(dispatch,getState)=> {
+  dispatch({ type: LOADING_LOCATION });
+  
+  //if location exists return
+  if (getState().user.location) {
+    return;
+  }
+  try {
+    console.log("running location")
+    let { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== 'granted') {
+      dispatch({ type: LOCATION_ERROR, payload: "Location Access was Denied" });
+      return;
+    }
+    let location = await Location.getCurrentPositionAsync({});
+    dispatch({ type: LOCATION_FETCHED, payload: location.coords });
+    dispatch(convertLocation(location.coords))
+    console.log("location fetched");
+    dispatch(clearErrors());
+  } catch (e) {
+    dispatch(getErrors(e));
+  }
+}
+
+//convert location to address
+export const convertLocation = (location) => async (dispatch) => {
+  try {
+    console.log("Fetching Address")
+    dispatch({ type: FETCHING_ADDRESS })
+    await Location.setGoogleApiKey("AIzaSyDP1phzFR8J7_1rsp9_iVn1ztr4WtoWL1A");
+    let address = await Location.reverseGeocodeAsync({
+      latitude:location.latitude,
+      longitude:location.longitude
+    }, {
+      options: {
+        useGoogleMaps: true, 
+      }
+    });
+    console.log(address)
+    dispatch({ type: ADDRESS_FETCHED, payload: address });
+    console.log("Address Fetched")
+  } catch (e) {
+    dispatch(getErrors(e));
+  }
+}
+
+export const setLocation = (x) => async (dispatch) => {
+  try {
+    console.log("Setting location");
+    
+    dispatch({ type: LOCATION_FETCHED, payload: x });
+    await dispatch(convertLocation(x));
+    console.log("location set");
+    dispatch(clearErrors());
+  } catch (e) {
+    dispatch(getErrors(e));
   }
 }

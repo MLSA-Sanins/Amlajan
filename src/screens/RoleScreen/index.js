@@ -1,9 +1,16 @@
-import React from 'react'
+import React, { useEffect } from 'react';
+import { connect } from "react-redux";
 import { StyleSheet, Text, View,Image,TouchableOpacity } from 'react-native';
 import {width,height} from "../../utils/dimensions";
-import {primary,secondary} from "../..//theme/theme";
+import { primary, secondary } from "../..//theme/theme";
+import {fetchLocation} from "../../redux/actions/userAction"
 
-const RoleScreen=({navigation})=> {
+const RoleScreen = ({ navigation,fetchLocation }) => {
+
+  useEffect(() => {
+    fetchLocation();
+  },[])
+  
   return (
     <View style={styles.Page}>
       <View style={styles.imgContainer}>
@@ -38,7 +45,9 @@ const RoleScreen=({navigation})=> {
   )
 }
 
-export default RoleScreen;
+export default connect(null, {
+  fetchLocation:fetchLocation
+})(RoleScreen);
 
 const styles = StyleSheet.create({
   Page: {

@@ -4,11 +4,11 @@ import { height, width } from "../utils/dimensions";
 import { Feather } from "@expo/vector-icons";
 import { primary } from "../theme/theme";
 
-export default function FormInput({phd,name}) {
+export default function FormInput({phd,name,value}) {
   return (
     <View style={styles.formContainer}>
       <Feather style={styles.icon} name={name}/>
-      <TextInput style={styles.textInput} placeholder={phd}/>
+      <TextInput value={value} style={styles.textInput} placeholder={phd}/>
     </View>
   )
 }

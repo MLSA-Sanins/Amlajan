@@ -26,7 +26,12 @@
         "foregroundImage": "./assets/adaptive-iconamlajan.png",
         "backgroundColor": "#FFFFFF"
       },
-      "googleServicesFile":"./google/google-services.json"
+      "googleServicesFile":"./google/google-services.json",
+      "config":{
+        "googleMaps":{
+          "apiKey":"AIzaSyDP1phzFR8J7_1rsp9_iVn1ztr4WtoWL1A"
+        }
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"

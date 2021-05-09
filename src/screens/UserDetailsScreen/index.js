@@ -1,38 +1,71 @@
-import React from 'react';
+import React,{ useCallback, useMemo, useRef } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image } from 'react-native';
 import FormInput from "../../components/FormInput";
 import { Feather } from "@expo/vector-icons";
 import { primary,secondary } from "../../theme/theme";
 import { connect } from "react-redux";
+import { height, width } from "../../utils/dimensions";
+import Animated from 'react-native-reanimated';
+import BottomSheetMap from "../../components/BottomSheetMap";
+import BottomSheetHeader from "../../components/BottomSheetHeader";
+import BottomSheet from 'reanimated-bottom-sheet';
 
 
 const UserDetailsScreen = ({ route, user }) => {
 
+  const closeBottomSheet = () => {
+    return sheetRef.current.snapTo(1)
+  }
+
+  const renderContent = () => (
+    <BottomSheetMap close={closeBottomSheet}/>
+  );
+
+  const renderHeader = () => (<BottomSheetHeader/>)
+ 
+  const sheetRef = React.useRef(null);
+
   return (
+    <React.Fragment>
     <View>
       <Text style={styles.title}>
         ENTER {route.params.title.toUpperCase()} DETAILS
       </Text>
       <View style={styles.picContainer}>
-        <Image
+          <Image
+          progressiveRenderingEnabled
           style={styles.img}
           source={{ uri: user.currentUser.picture.data.url }}
           />
       </View>
-      <FormInput phd="Name" name="user"/>
+      <FormInput value={user.currentUser.name} phd="Name" name="user"/>
       {route.params.title.toUpperCase() === "PROVIDER" && <FormInput phd="Email" name="mail" />}
       {route.params.title.toUpperCase() === "PROVIDER" &&<FormInput phd="Phone Number" name="smartphone"/>}
       <View style={styles.formContainer}>
         <Feather style={styles.icon} name="map"/>
         <TextInput style={styles.textInput} placeholder="Address"/>
-        <TouchableOpacity style={styles.location}>
+        <TouchableOpacity
+          style={styles.location}
+          onPress={() => sheetRef.current.snapTo(0)}
+        >
           <Feather style={styles.mapPin} name="map-pin"/>
         </TouchableOpacity>
       </View>
       <TouchableOpacity style={styles.registerButton}>
         <Text style={styles.buttonText}>{route.params.title==="Provider"?"REGISTER":"SEARCH PROVIDERS" }</Text>
       </TouchableOpacity>
-    </View>
+      </View>
+      <BottomSheet
+        ref={sheetRef}
+        snapPoints={[height/1.5, 0]}
+        
+        renderContent={renderContent}
+        renderHeader={renderHeader}
+        initialSnap={1}
+        enabledContentGestureInteraction={false}
+        enabledHeaderGestureInteraction
+      />
+      </React.Fragment>
   )
 };
 
@@ -74,12 +107,14 @@ const styles = StyleSheet.create({
   },
   location:{
     justifyContent:"center",
-    backgroundColor:primary.main
+    backgroundColor: primary.main,
+    borderTopRightRadius: 4,
+    borderBottomRightRadius:4,
   },
   mapPin:{
     fontSize: 20,
     margin: 10,
-    color:"#fff"
+    color: "#fff",  
   },
   picContainer: {
     marginTop: 30,
@@ -87,8 +122,8 @@ const styles = StyleSheet.create({
     width: 120,
     height: 120,
     borderRadius: 100,
+    backgroundColor:"gray",
     alignSelf: "center",
-    elevation:15
   },
   img: {
     width: 120,
