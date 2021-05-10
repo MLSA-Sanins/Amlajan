@@ -22,6 +22,7 @@
     },
     "android": {
       "package": "com.sanins.amlajan",
+      "softwareKeyboardLayoutMode":"pan",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-iconamlajan.png",
         "backgroundColor": "#FFFFFF"

@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { primary } from "../theme/theme";
 
-export default function BottomSheetHeader() {
+const BottomSheetHeader=()=> {
   return (
     <View style={styles.header}>
       <View style={styles.panelHeader}>
@@ -11,6 +11,8 @@ export default function BottomSheetHeader() {
     </View>
   )
 }
+
+export default React.memo(BottomSheetHeader);
 
 const styles = StyleSheet.create({
   header: {

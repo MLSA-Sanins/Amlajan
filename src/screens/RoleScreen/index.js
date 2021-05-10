@@ -1,15 +1,26 @@
-import React, { useEffect } from 'react';
+import React, { useEffect,useState } from 'react';
 import { connect } from "react-redux";
-import { StyleSheet, Text, View,Image,TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity,InteractionManager,ActivityIndicator } from 'react-native';
 import {width,height} from "../../utils/dimensions";
 import { primary, secondary } from "../..//theme/theme";
 import {fetchLocation} from "../../redux/actions/userAction"
 
 const RoleScreen = ({ navigation,fetchLocation }) => {
 
-  useEffect(() => {
-    fetchLocation();
-  },[])
+
+  const [screenLoading, setScreenLoading] = useState(true);
+  useEffect(()=>{
+    InteractionManager.runAfterInteractions(() => {
+      // 2: Component is done animating 
+      // 3: Start fetching data that is needed to render UI
+      fetchLocation();
+      setScreenLoading(false) //Set screenloading prop to false
+    });
+  }, [])
+  
+  if (screenLoading) {
+    return <ActivityIndicator/>
+  }
   
   return (
     <View style={styles.Page}>

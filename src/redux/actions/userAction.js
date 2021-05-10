@@ -76,20 +76,14 @@ export const signinUserFb = () => async (dispatch,getState) => {
   dispatch({ type: FETCHING_USER })
 
   try {
-    console.log("FB SIGNING")
     await Facebook.initializeAsync({
       appId: '3843660325751667',
     });
     const user = await Facebook.logInWithReadPermissionsAsync({
       permissions: ['public_profile'],
     });
-    //console.log(user);
     if (user.type === 'success') {
       
-      const height = 200;
-      
-      // Get the user's name using Facebook's Graph API
-      // const response = await fetch(`https://graph.facebook.com/me?access_token=${user.token}`);
       const data = await fetch(`https://graph.facebook.com/v10.0/me?fields=id%2Cname%2Cpicture.height(200).width(200)&access_token=${user.token}`);
       const dataJson = await data.json();
       dispatch({ type: USER_FETCHED, payload: dataJson })
@@ -131,9 +125,8 @@ export const fetchLocation = () =>async(dispatch,getState)=> {
 //convert location to address
 export const convertLocation = (location) => async (dispatch) => {
   try {
-    console.log("Fetching Address")
     dispatch({ type: FETCHING_ADDRESS })
-    await Location.setGoogleApiKey("AIzaSyDP1phzFR8J7_1rsp9_iVn1ztr4WtoWL1A");
+    Location.setGoogleApiKey("AIzaSyDP1phzFR8J7_1rsp9_iVn1ztr4WtoWL1A");
     let address = await Location.reverseGeocodeAsync({
       latitude:location.latitude,
       longitude:location.longitude
@@ -142,9 +135,7 @@ export const convertLocation = (location) => async (dispatch) => {
         useGoogleMaps: true, 
       }
     });
-    console.log(address)
     dispatch({ type: ADDRESS_FETCHED, payload: address });
-    console.log("Address Fetched")
   } catch (e) {
     dispatch(getErrors(e));
   }
@@ -152,11 +143,8 @@ export const convertLocation = (location) => async (dispatch) => {
 
 export const setLocation = (x) => async (dispatch) => {
   try {
-    console.log("Setting location");
-    
     dispatch({ type: LOCATION_FETCHED, payload: x });
-    await dispatch(convertLocation(x));
-    console.log("location set");
+    dispatch(convertLocation(x));
     dispatch(clearErrors());
   } catch (e) {
     dispatch(getErrors(e));

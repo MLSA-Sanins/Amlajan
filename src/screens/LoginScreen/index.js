@@ -1,5 +1,5 @@
-import React,{useEffect} from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import React,{useEffect,useState} from 'react';
+import { StyleSheet, Text, View, TouchableOpacity,ActivityIndicator,InteractionManager } from 'react-native';
 import { width, height } from "../../utils/dimensions";
 import { bindActionCreators } from 'redux';
 import { initAsync } from "../../utils/googleSignIn";
@@ -14,7 +14,9 @@ import { primary } from "../../theme/theme";
 import { connect } from "react-redux";
 import { signinUserGoogle,signinUserFb } from "../../redux/actions/userAction";
 
-const LoginScreen = ({ navigation,signinUserGoogle,signinUserFb,dispatch,fetchUser }) => {
+const LoginScreen = ({ navigation, signinUserGoogle, signinUserFb, dispatch, fetchUser }) => {
+  
+  const [screenLoading, setScreenLoading] = useState(true);
   
   const signinGoogle = () => {
     signinUserGoogle();
@@ -25,9 +27,16 @@ const LoginScreen = ({ navigation,signinUserGoogle,signinUserFb,dispatch,fetchUs
 
   useEffect(() => {
     //dispatch({type:FETCHING_USER})
-    initAsync(fetchUser, dispatch);
-    initFbAsync(fetchUser, dispatch)
-  },[])
+    InteractionManager.runAfterInteractions(() => {
+      initAsync(fetchUser, dispatch);
+      initFbAsync(fetchUser, dispatch);
+      setScreenLoading(false);
+    })
+  }, [])
+  
+  if (screenLoading) {
+    return <ActivityIndicator/>
+  }
 
   return (
     <View style={styles.Page}>

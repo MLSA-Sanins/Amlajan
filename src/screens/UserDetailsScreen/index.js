@@ -1,77 +1,125 @@
-import React,{ useCallback, useMemo, useRef } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image } from 'react-native';
+import React,{useState,useRef,useEffect} from 'react';
+import {
+  StyleSheet,
+  Keyboard,
+  Text,
+  View,
+  TextInput,
+  TouchableOpacity,
+  Image,
+  InteractionManager,
+  TouchableWithoutFeedback,
+  KeyboardAvoidingView,
+  ActivityIndicator 
+} from 'react-native';
 import FormInput from "../../components/FormInput";
 import { Feather } from "@expo/vector-icons";
 import { primary,secondary } from "../../theme/theme";
 import { connect } from "react-redux";
-import { height, width } from "../../utils/dimensions";
-import Animated from 'react-native-reanimated';
+import { setAddress } from "../../utils/setAddress";
 import BottomSheetMap from "../../components/BottomSheetMap";
 import BottomSheetHeader from "../../components/BottomSheetHeader";
+import { height, width } from "../../utils/dimensions";
+import Animated from 'react-native-reanimated';
 import BottomSheet from 'reanimated-bottom-sheet';
 
 
 const UserDetailsScreen = ({ route, user }) => {
 
-  const closeBottomSheet = () => {
-    return sheetRef.current.snapTo(1)
+  const [screenLoading, setScreenLoading] = useState(true);
+  const [userName, setUserName] = useState(`${user.currentUser.name}`);
+  const [address, changeAddress] = useState(`${setAddress(user.address)}`);
+
+  
+
+  useEffect(()=>{
+    InteractionManager.runAfterInteractions(() => {
+      // 2: Component is done animating 
+      // 3: Start fetching data that is needed to render UI
+      setScreenLoading(false) //Set screenloading prop to false
+    });
+  },[])
+
+  const bs = useRef(null);
+  //const fall = new Animated.value(1);
+
+  const openBottomSheet = () => {
+    bs.current.snapTo(0);
   }
 
-  const renderContent = () => (
-    <BottomSheetMap close={closeBottomSheet}/>
-  );
+  const closeBottomSheet = () => {
+    bs.current.snapTo(1);
+  }
 
-  const renderHeader = () => (<BottomSheetHeader/>)
- 
-  const sheetRef = React.useRef(null);
+  const renderHeader = () =>(<BottomSheetHeader/>) 
+    
+
+  const renderContent = () => (<BottomSheetMap close={closeBottomSheet} />);
+
+  if (screenLoading) {
+    return <ActivityIndicator />;
+  }
 
   return (
-    <React.Fragment>
-    <View>
-      <Text style={styles.title}>
-        ENTER {route.params.title.toUpperCase()} DETAILS
-      </Text>
-      <View style={styles.picContainer}>
-          <Image
-          progressiveRenderingEnabled
-          style={styles.img}
-          source={{ uri: user.currentUser.picture.data.url }}
+    <>
+      <KeyboardAvoidingView style={{flex:1}} behavior="height">
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+          <View>
+          <Text style={styles.title}>
+            ENTER {route.params.title.toUpperCase()} DETAILS
+          </Text>
+          <View style={styles.picContainer}>
+              <Image
+              progressiveRenderingEnabled
+              style={styles.img}
+              source={{ uri: user.currentUser.picture.data.url }}
+              />
+          </View>
+          <View style={styles.formContainer}>
+            <Feather style={styles.icon} name="user"/>
+              <TextInput
+                value={userName}
+                onChangeText={setUserName}
+                style={styles.textInput}
+                placeholder="Username"
+              />
+          </View>
+          {route.params.title.toUpperCase() === "PROVIDER" && <FormInput phd="Email" name="mail" />}
+          {route.params.title.toUpperCase() === "PROVIDER" &&<FormInput phd="Phone Number" name="smartphone"/>}
+          <View style={styles.formContainer}>
+            <Feather style={styles.icon} name="map"/>
+            <TextInput value={address} onChangeText={changeAddress} style={styles.textInput} placeholder="Address"/>
+            <TouchableOpacity
+              style={styles.location}
+              onPress={() =>  openBottomSheet()}
+            >
+              <Feather style={styles.mapPin} name="map-pin"/>
+            </TouchableOpacity>
+          </View>
+          <TouchableOpacity style={styles.registerButton}>
+            <Text style={styles.buttonText}>{route.params.title==="Provider"?"REGISTER":"SEARCH PROVIDERS" }</Text>
+          </TouchableOpacity>
+          </View>
+          </TouchableWithoutFeedback>
+          <BottomSheet
+            ref={bs}
+            snapPoints={[height / 1.5, 0]}
+            initialSnap={1}
+            renderContent={renderContent}
+            renderHeader={renderHeader}
+            // callbackNode={fall}
+            enabledContentGestureInteraction={false}
+            enabledHeaderGestureInteraction={true}
           />
-      </View>
-      <FormInput value={user.currentUser.name} phd="Name" name="user"/>
-      {route.params.title.toUpperCase() === "PROVIDER" && <FormInput phd="Email" name="mail" />}
-      {route.params.title.toUpperCase() === "PROVIDER" &&<FormInput phd="Phone Number" name="smartphone"/>}
-      <View style={styles.formContainer}>
-        <Feather style={styles.icon} name="map"/>
-        <TextInput style={styles.textInput} placeholder="Address"/>
-        <TouchableOpacity
-          style={styles.location}
-          onPress={() => sheetRef.current.snapTo(0)}
-        >
-          <Feather style={styles.mapPin} name="map-pin"/>
-        </TouchableOpacity>
-      </View>
-      <TouchableOpacity style={styles.registerButton}>
-        <Text style={styles.buttonText}>{route.params.title==="Provider"?"REGISTER":"SEARCH PROVIDERS" }</Text>
-      </TouchableOpacity>
-      </View>
-      <BottomSheet
-        ref={sheetRef}
-        snapPoints={[height/1.5, 0]}
-        
-        renderContent={renderContent}
-        renderHeader={renderHeader}
-        initialSnap={1}
-        enabledContentGestureInteraction={false}
-        enabledHeaderGestureInteraction
-      />
-      </React.Fragment>
+      </KeyboardAvoidingView>
+    </>
   )
 };
 
 const mapStateToProps = (state) => {
   return { user:state.user };
 }
+
 
 export default connect(mapStateToProps, {
   

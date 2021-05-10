@@ -2,6 +2,7 @@ import React from 'react';
 import Providers from "./src/navigation";
 import { Asset } from 'expo-asset';
 import AppLoading from 'expo-app-loading';
+import { StatusBar } from 'expo-status-bar';
 import { store } from "./src/redux/store";
 import {Provider} from "react-redux";
 //import { StatusBar } from 'expo-status-bar';
@@ -57,7 +58,8 @@ class App extends React.Component {
     };
     return (
       <Provider store={store}>
-          <Providers />
+        <Providers />
+        <StatusBar/>
       </Provider>
     )
   }

@@ -27,7 +27,7 @@ export default (state=initialObject,action) => {
     case LOCATION_FETCHED:
       return { ...state, loadingLocation: false, location: action.payload }
     case ADDRESS_FETCHED:
-      return{...state,loadingLocation: false,address:action.payload}
+      return{...state,loadingLocation: false,address:action.payload[0]}
     case LOCATION_ERROR:
       return {...state,loadingLocation:false,location:null}
     default: {

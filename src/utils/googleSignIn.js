@@ -6,7 +6,6 @@ export const initAsync = async (fetchUser,dispatch) => {
     await GoogleSignIn.initAsync({});
     _syncUserWithStateAsync(fetchUser);
   } catch(e) {
-    console.log("Problems", e);
     dispatch(clearErrors(e));
   }
 };
@@ -21,7 +20,6 @@ const _syncUserWithStateAsync = async (fetchUser) => {
       fetchUser({...user,picture:{data:{url:pic}}});
     } 
   } catch (e) {
-    console.log("Problems", e);
     dispatch(clearErrors(e));
   }
 };

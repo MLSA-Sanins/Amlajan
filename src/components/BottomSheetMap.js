@@ -1,6 +1,6 @@
-import React,{useState} from 'react';
+import React,{useState,useEffect} from 'react';
 import MapView, { AnimatedRegion, Marker } from 'react-native-maps';
-import { StyleSheet, Text, TouchableOpacity,TextInput,KeyboardAvoidingView, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity,InteractionManager,ActivityIndicator, View } from 'react-native';
 import { width, height } from "../utils/dimensions";
 import { primary, secondary } from "../theme/theme";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -12,8 +12,9 @@ import mapAubergine from "../utils/mapAubergine.json";
 
 
 
-const BottomSheet = ({ location, isLoading,setLocation, fetchLocation,close }) => {
+const BottomSheetMap = ({ location, isLoading,setLocation, fetchLocation,close }) => {
   
+  const [screenLoading, setScreenLoading] = useState(true);
   const [themes, setThemes] = useState(mapNormal);
   const [x, setX] = useState(location);
 
@@ -21,6 +22,7 @@ const BottomSheet = ({ location, isLoading,setLocation, fetchLocation,close }) =
     setLocation(x);
     close();
   }
+
 
   const cycleTheme = () => {
     if (themes === mapNormal) {
@@ -47,6 +49,20 @@ const BottomSheet = ({ location, isLoading,setLocation, fetchLocation,close }) =
       latitudeDelta: 1.0922,
       longitudeDelta: 1.0421
     }
+  }
+
+  useEffect(() => {
+    InteractionManager.runAfterInteractions(() => {
+      // 2: Component is done animating 
+      // 3: Start fetching data that is needed to render UI
+      setMarkerLocation();
+      returnInitialValue();
+      setScreenLoading(false) //Set screenloading prop to false
+    });
+  }, []);
+
+  if (screenLoading) {
+    return <ActivityIndicator/>
   }
 
   return (
@@ -80,16 +96,18 @@ const mapStateToProps = (state) => {
   return {location:state.user.location,isLoading:state.user.loadingLocation}
 }
 
+const component =React.memo(BottomSheetMap);
+
 export default connect(mapStateToProps, {
   fetchLocation: fetchLocation,
   setLocation:setLocation
-})(BottomSheet);
+})(component);
 
 const styles = StyleSheet.create({
   bottomView: {
     // backgroundColor: primary.light,
     // padding: 20,
-    height: height / 2,
+    height: height / 1.5,
     flexDirection:"column",
     alignItems:"center"
   },
@@ -104,7 +122,8 @@ const styles = StyleSheet.create({
     height: 50,
     width:250,
     position: 'absolute',
-    bottom:0,
+    top:'auto',
+    bottom:50,
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
@@ -121,7 +140,7 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     elevation:5,
     position: 'absolute',
-    bottom: height / 10,
+    bottom: height / 5,
     right: width / 15,
     justifyContent: "center",
     alignItems:"center"
@@ -137,7 +156,7 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     elevation:5,
     position: 'absolute',
-    bottom: height / 5,
+    bottom: height / 3.5,
     right: width / 15,
     justifyContent: "center",
     alignItems:"center"
